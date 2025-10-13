@@ -19,6 +19,7 @@ The content is organized into weekly modules, making it suitable for a course or
 | Folder | Description |
 | :--- | :--- |
 | `Week 01 - Introduction to Haskell` | Covers the absolute fundamentals of Haskell, including basic syntax, data types, and functions. |
+| `Week 02 - Data Types` | Covers the absolute fundamentals of Haskell data types, including several simple applications. |
 | `LICENSE` | The MIT License for this project. |
 | ... | *More weekly modules will be added here as the course progresses.* |
 
