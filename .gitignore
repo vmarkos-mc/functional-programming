@@ -1,0 +1,6 @@
+# Ignore latex auxillary files
+**/*.aux
+**/*.log
+**/*.lot
+**/*.lof
+**/*.out
