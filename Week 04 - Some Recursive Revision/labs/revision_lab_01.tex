@@ -1,13 +1,10 @@
 % !TeX spellcheck = en_GB
 \documentclass[a4paper]{tufte-handout}
-%\usepackage{layouts} % Feel free to remove this one
 \usepackage{amsmath,amsthm,amssymb}
-%\usepackage[backend=biber, sortcites, citestyle=numeric]{biblatex}
 \usepackage[tt=false]{libertine}
 \usepackage{libertinust1math}
 \usepackage[T1]{fontenc}
 \usepackage{enumitem}
-%\usepackage[top=1in, bottom=1in, left=1.6in, right=1.6in]{geometry}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{ifthen}
 \usepackage{listings}
@@ -120,11 +117,11 @@
 	A few exercises to get us started, with a focus on recursion and simple list operations. As a set of guidelines for this and all upcoming exercises, do use function signatures and, where needed, utilise list comprehensions appropriately.
 	
 	\begin{exercise}
-		Write a function named \code{max'} that returns the maximum element of a list.
+		Write a function named \code{max'} that returns the maximum element of a list. Then implement a tail recursive version, \code{max'{'}}.
 	\end{exercise}
 
 	\begin{exercise}
-		Write a function named \code{sum'} that computes the sum of the elements of a list of floats.
+		Write a function named \code{sum'} that computes the sum of the elements of a list of floats. Then implement a tail recursive version, \code{sum'{'}}.
 	\end{exercise}
 
 	\begin{exercise}
@@ -179,14 +176,8 @@
 		\caption{Merge sort algorithm. First the list is recursively split into halves which are then merged in a way that respects order of each merged part.}
 		\label{fig:merge sort}
 	\end{marginfigure}
-	Having recalled recursion basics, we now proceed to have a bit of higher order fun with a classical sorting algorithm you have encountered last year in your Data Structures module. With that in mind, the next few exercises will help us implement this algorithm from scratch.
-	%
-	\begin{exercise}\label{ex:higher order function}
-		Write a function named \code{functionApplicator} that, given a function, let \code{fn}, and a number, \code{x}, as input, applies \code{fn} to \code{x} to compute and return \code{fn x}.
-	\end{exercise}
-	%
-	A simple but key operation during merge sort is list splitting at two (almost) equal halves.
-	\begin{exercise}
+	Having recalled recursion basics, we now proceed to have a bit of higher order fun with a classical sorting algorithm you have encountered last year in your Data Structures module. With that in mind, the next few exercises will help us implement this algorithm from scratch.	A simple but key operation during merge sort is list splitting at two (almost) equal halves.
+	\begin{exercise}\label{ex:split at}
 		Write a function named \code{splitAt'} that given a non--negative integer \code{n} and a list \code{ls} splits \code{ls} at two parts at \code{n}, returning a 2--tuple containing the two parts.
 	\end{exercise}
 	%
@@ -229,7 +220,7 @@
 	
 	Having implemented the key operation of sorted list merging and list splitting, the actual implementation of merge sort requires me(a)gre effort\footnote{Cheap wordplay with merge and meagre, in case it went unnoticed\ldots}. So, since we are at it:
 	\begin{exercise}\label{ex:merge sort}
-		Implement merge sort as a Haskell function \code{mergeSort}. You can (and, maybe, should), utilise \code{merge} from Exercise~\ref{ex:merge} and a higher order function, as the one you developed in Exercise~\ref{ex:higher order function}. Consider how splitting and then merging will be implemented using recursion.
+		Implement merge sort as a Haskell function \code{mergeSort}. You can (and, maybe, should), utilise \code{merge} from Exercise~\ref{ex:merge} and \code{splitAt'} from Exercise~\ref{ex:split at}. Consider how splitting and then merging will be implemented using recursion.
 	\end{exercise}
 	%
 	%
@@ -245,7 +236,7 @@
 				\node[draw, rectangle, minimum width={\pw mm}, minimum height=2mm] (p \i) at (0,\i) {};
 			}
 		\end{tikzpicture}
-		\caption{A heap of pancakes, awaiting for its sorting.}
+		\caption{A heap of pancakes, awaiting to be sorted.}
 		\label{fig:pancakes heap}
 	\end{marginfigure}
 
@@ -294,6 +285,14 @@
 	\section{Random Permutations vs Sorting}
 	%
 	So far, we have generated a random permutation by hard--coding it into our codebase. However, a lot of interesting and efficient algorithms do exist for generating random permutations of lists of integers. Probably the most well known, \href{https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle}{Fisher-Yates}, is a common efficient way to implement random shuffling in $O(n)$. However, its implementation requires the active utilisation of static arrays, which are not that straightforward to implement in Haskell. As a substitute, we can think of random shuffling as essentially sorting towards a not necessarily linearly sorted list (in the ordinary sense). Thus, we can utilise any sorting algorithm, in particular merge sort, as developed in Exercise~\ref{ex:merge sort}, to implement an almost equally efficient random shuffling algorithm in Haskell, with the added advantage of guaranteed lack of impurities --- besides randomness, of course.
+	
+	\begin{exercise}\label{ex:merge shuffle}
+		Think of an algorithm that could be utilised in order to shuffle a list by improvising on merge sort. The key here is to ensure equal probability across all possible permutations. \textit{Hint:} Just choosing at random when merging does not suffice. Can you see why?
+	\end{exercise}
+
+	\begin{exercise}
+		Implement the algorithm you devised in Exercise~\ref{ex:merge shuffle}. To do so, you will need a way to generate random numbers in Haskell, which can be efficiently done using the \code{Random} monad\footnote{A monad is something we are going to study later on this semester. Till then, you can think of them as ``wrappers'' that ensure some certain sort of impurity (e.g., user input / output) stays within certain boundaries, not ``polluting'' the rest of the program.} from the \code{Control} class, i.e., \code{Control.Monad.Random}. To generate random integers in a closed range $[a,b]$, just use \code{getRandomR (a, b)}. You might also want to consider wrapping everything around a custom monad, by declaring the type \code{type R a = Rand StdGen a} or simply using the \code{IO} monad.
+	\end{exercise}
 	%
 	%
 	%
