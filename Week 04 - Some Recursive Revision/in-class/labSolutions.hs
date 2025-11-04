@@ -60,3 +60,57 @@ sum'' (x:xs) = auxSum'' xs x
     where
         auxSum'' [] currentSum = currentSum
         auxSum'' (x:xs) currentSum = auxSum'' xs x + currentSum
+
+-- Exercise 3: Fibonacci sequence
+-- f_n = f_{n-1} + f_{n-2}
+-- f_0 = 0, f_1 = 1
+
+-- Bad idea since, among others, we make two recursive calls
+-- each time, so 2 ^ n in total (most of which are wasted).
+fib :: Integer -> Integer
+fib 0 = 0 -- Base case for n == 0
+fib 1 = 1 -- Base case for n == 1
+fib n = fib (n - 1) + fib (n - 2)
+
+fib' :: Integer -> Integer
+-- Implement this at home!
+fib' 0 = 0
+fib' 1 = 1
+
+-- Exercise 5: splitAt'
+
+-- Assume that n is always within bounds
+splitAt' :: [a] -> Integer -> ([a], [a])
+splitAt' [] _ = ([], []) -- Base case
+splitAt' ls n = auxSplit ls n [] 0 -- Utilise a tail recursive auxilliary function
+    where
+        -- `ls` is the initial list, missing the first `currentN` elements,
+        -- which are included in `left`
+        auxSplit ls@(x:xs) n left currentN
+            | currentN == n = (left, ls)
+            | otherwise = auxSplit xs n (left ++ [x]) (currentN + 1)
+-- Reminder: For lists, the ls@(x:xs) syntax means:
+--  * ls keeps the entire list;
+--  * x keeps the list head (first element);
+--  * xs keeps the list tail (all but the first element as a list).
+
+-- Exercise 6: Merge of sorted lists (Not tail recursive, though)
+merge :: Ord a => [a] -> [a] -> [a]
+merge [] ys         = ys
+merge xs []         = xs
+merge a@(x:xs) b@(y:ys)
+    | x < y     = x : merge xs b
+    | otherwise = y : merge a ys
+
+-- Exercise 7: Merge sort
+mergeSort :: Ord a => [a] -> [a]
+mergeSort [] = []
+mergeSort [x] = [x]
+mergeSort ls = merge (mergeSort l) (mergeSort r)
+    where
+        (l, r) = splitAt' ls (length' ls `div` 2)
+
+-- Custom length function
+length' :: [a] -> Integer
+length' [] = 0
+length' (_:xs) = 1 + length' xs
