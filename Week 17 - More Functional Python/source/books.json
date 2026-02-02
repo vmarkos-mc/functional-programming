@@ -1,0 +1,13 @@
+{
+    "books": [
+        {"title": "The Hitchhiker's Guide to the Galaxy", "author": "Douglas Adams", "genre": "Science Fiction", "year": 1979, "rating": 4.5},
+        {"title": "Pride and Prejudice", "author": "Jane Austen", "genre": "Classic", "year": 1813, "rating": 4.3},
+        {"title": "1984", "author": "George Orwell", "genre": "Dystopian", "year": 1949, "rating": 4.7},
+        {"title": "The Lord of the Rings", "author": "J.R.R. Tolkien", "genre": "Fantasy", "year": 1954, "rating": 4.8},
+        {"title": "Dune", "author": "Frank Herbert", "genre": "Science Fiction", "year": 1965, "rating": 4.6},
+        {"title": "To Kill a Mockingbird", "author": "Harper Lee", "genre": "Classic", "year": 1960, "rating": 4.9},
+        {"title": "Brave New World", "author": "Aldous Huxley", "genre": "Dystopian", "year": 1932, "rating": 4.4},
+        {"title": "The Colour of Magic", "author": "Terry Pratchett", "genre": "Fantasy", "year": 1983, "rating": 4.2},
+        {"title": "Foundation", "author": "Isaac Asimov", "genre": "Science Fiction", "year": 1951, "rating": 4.5}
+    ]
+}
