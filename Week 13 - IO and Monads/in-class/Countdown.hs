@@ -53,15 +53,39 @@ sublist (x:xs)  = ys ++ map (x:) ys
 exprs :: [Int] -> [Expression]
 exprs []    = []
 exprs [x]   = [Value x]
+exprs ls@(x:xs) = [s | l <- subbags ls, s <- combine l]
 -- TODO: Combine all numbers with all operators using combine.
 -- HINT: Use subbags to get all possible permutations of all sublists
 
--- Computes all valid combinations given certain inputs
-combine :: Expression -> Expression -> [Expression]
-combine (Value n) (Value m)
-    | valid Minus n m && valid Div n m  = Node (Value n) Minus (Value m) : Node (Value n) Div (Value m) : alwaysValid
-    | valid Minus n m                   = Node (Value n) Minus (Value m) : alwaysValid
-    | valid Div n m                     = Node (Value n) Div (Value m) : alwaysValid
-    | otherwise                         = alwaysValid
+combine :: [Int] -> [Expression]
+combine []  = []
+combine [x] = [Value x]
+combine xs  = [ e | (l, r) <- nesplit xs, le <- combine l, re <- combine r, e <- combine' le re]
+
+combine' :: Expression -> Expression -> [Expression]
+combine' a b
+    | valid Minus x y && valid Div x y  = Node a Minus b : Node a Div b : alwaysValid
+    | valid Minus x y                   = Node a Minus b : alwaysValid
+    | valid Div x y                     = Node a Div b : alwaysValid
+    | otherwise                         = alwaysValid 
     where
-        alwaysValid = [Node (Value n) Plus (Value m), Node (Value n) Times (Value m)]
+        alwaysValid = [Node a Plus b, Node a Times b]
+        x = eval a
+        y = eval b
+
+eval :: Expression -> Int
+eval (Value n)      = n
+eval (Node l op r)  = apply op (eval l) (eval r)
+
+-- Computes all valid combinations given certain inputs
+-- combine :: Expression -> Expression -> [Expression]
+-- combine (Value n) (Value m)
+--     | valid Minus n m && valid Div n m  = Node (Value n) Minus (Value m) : Node (Value n) Div (Value m) : alwaysValid
+--     | valid Minus n m                   = Node (Value n) Minus (Value m) : alwaysValid
+--     | valid Div n m                     = Node (Value n) Div (Value m) : alwaysValid
+--     | otherwise                         = alwaysValid
+--     where
+--         alwaysValid = [Node (Value n) Plus (Value m), Node (Value n) Times (Value m)]
+
+solve :: [Int] -> Int -> [Expression]
+solve ns t  = [e | e <- exprs ns, eval e == t]
