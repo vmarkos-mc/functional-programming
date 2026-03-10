@@ -1,8 +1,10 @@
 import re
 import functools as ft
 from dataclasses import dataclass
+from matplotlib import pyplot as plt
 
 # A frozen dataclass is like an immutable object
+# An equally good alternative is a named tuple
 @dataclass(frozen=True)
 class CSV:
     header: list[str]
@@ -10,6 +12,7 @@ class CSV:
 
 @dataclass(frozen=True)
 class Distribution:
+    # Absolute frequencies of keys as values
     d: dict[str, int]
 
 def update_distribution(d_old: Distribution, k: str) -> Distribution:
@@ -32,6 +35,7 @@ def join_distributions(d1: Distribution, d2: Distribution) -> Distribution:
 
 def read_csv(path: str, delimiter=r'(?<!\s),(?!\s)') -> CSV:
     """Loads csv data from text"""
+    size = 0
     with open(path, 'r', encoding='utf8') as file:
         header = re.split(delimiter, next(file))
         rows = [re.split(delimiter, row) for row in file]
@@ -60,13 +64,56 @@ def author_distribution(data: CSV) -> Distribution:
         map(lambda row: Distribution({row[auth_index]: 1}), data.rows)
     )
 
+def productive_authors(data: CSV, threshold: int) -> Distribution:
+    """Computes the most productive authors as indicated by publications."""
+    ad = author_distribution(data)
+    return Distribution({
+        author: publications
+            for author, publications in ad.d.items()
+                if publications >= threshold
+    })
+
+def page_distribution(data: CSV, width: int) -> Distribution:
+    """Computes the distribution of pages across the dataset"""
+    header = data.header
+    pages_index = header.index('num_pages')
+    return ft.reduce(
+        join_distributions,
+        map(
+            lambda row: Distribution({
+                ((int(row[pages_index]) // width) * width,
+                 (int(row[pages_index]) // width + 1) * width): 1
+            }),
+            data.rows
+        )
+    )
+
+# For example, for a book with 684 pages and bin width 50.
+#   1. Divide 684 by 50, so we get: 13 and 34 as a remainder
+#   2. So, we compute: 13 * 50 = 650 and 14 * 50 = 700.
+#   3. So, our target bin is 650, 700
+
+def plot_histogram(distribution: Distribution) -> None:
+    fig, ax = plt.subplots()
+    labels, frequencies = zip(*(
+        ("-".join(map(str, k)), v)
+        for k, v in sorted(distribution.d.items(), key=lambda item: item[0][0])
+    ))
+    plt.barh(labels, frequencies)
+    plt.show()
+
 def main():
     PATH = "books.csv"
     data = load_data(PATH)
     mr = mean_rating(data)
     print(f"Mean rating: {mr}")
-    ad = author_distribution(data)
-    print(f"Author Distribution: {ad}")
+    # ad = author_distribution(data)
+    # print(f"Author Distribution: {ad}")
+    # prod_auth = productive_authors(data, 6)
+    # print(f"Productive authors: {prod_auth}")
+    page_dist = page_distribution(data, 100)
+    print(f"Page_distribution: {page_dist}")
+    plot_histogram(page_dist)
 
 if __name__ == "__main__":
     main()
