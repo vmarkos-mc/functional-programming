@@ -37,7 +37,10 @@ def deal(deck, hand_size=5):
 
 
 def cut(deck, deck_size=52):
-    ...
+    cutting_point = random.randint(0, deck_size - 1)
+    top = it.islice(deck, cutting_point)
+    cut_deck = it.chain(deck, top)
+    return cut_deck
 
 
 def main():
