@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<CAT>
+  <NAME>Izzy</NAME>
+  <BREED>Siamese</BREED>
+  <AGE>6</AGE>
+  <ALTERED>yes</ALTERED>
+  <DECLAWED>no</DECLAWED>
+  <LICENSE>
+    <LICENSEID>123ght789</LICENSEID>
+    <VET>
+      <NAME>Betty</NAME>
+      <SURNAME>Vetty</SURNAME>
+    </VET>
+    <DATE>
+      <DAY>4</DAY>
+      <MONTH>4</MONTH>
+      <YEAR>2024</YEAR>
+    </DATE>
+  </LICENSE>
+  <OWNER>Colin Wilcox</OWNER>
+</CAT>
