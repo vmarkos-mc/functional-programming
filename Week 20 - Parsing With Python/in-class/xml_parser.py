@@ -1,7 +1,6 @@
 # in-class/xml_parser.py
 
 from dataclasses import dataclass
-from enum import Enum
 
 
 @dataclass(frozen=True)
@@ -32,22 +31,22 @@ class XML:
     tag_tree: TagTree
 
 
-# TODO: Implement dataclasses for tokens
 # TODO: Implement the scanning and parsing functions below
 
 
-@dataclass
-class TokenType(Enum):
-    OPENING_TAG = 0
-    CLOSING_TAG = 1
-    ALPHNUM = 2
-    XML_TAG = 3
-    VERSION_PARAM = 4
-    STRING_LITERAL = 5
+def read_file(filepath) -> iter:
+    """Generator that reads a file character by character"""
+    with open(filepath, 'r') as file:
+        for line in file:
+            for char in line:
+                yield char
 
 
-def scan_file(file) -> tuple:
+def scan_file(filepath) -> tuple:
     """Computes a tuple of all valid XML tokens"""
+    for char in read_file(filepath):
+        ...
+                
 
 
 def parse_tokens(tokens: tuple) -> XML:
@@ -55,7 +54,7 @@ def parse_tokens(tokens: tuple) -> XML:
 
 
 def main():
-    ...
+    scan_file("cat.xml")
 
 
 if __name__ == "__main__":
