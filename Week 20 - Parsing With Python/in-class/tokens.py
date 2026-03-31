@@ -10,6 +10,7 @@ class TokenType(Enum):
     XML_TAG = 3
     VERSION_PARAM = 4
     STRING_LITERAL = 5
+    EQ = 6
 
 
 @dataclass(frozen=True)
