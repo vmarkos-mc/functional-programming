@@ -75,6 +75,6 @@ public class Dataset {
             authors = (String) keys.nextElement();
             authorsRating.put(authors, totalRating.get(authors) / totalReviewsCount.get(authors));
         }
-        return totalRating;
+        return authorsRating;
     }
 }
