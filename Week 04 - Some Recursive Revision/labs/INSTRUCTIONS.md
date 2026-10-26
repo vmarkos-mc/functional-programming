@@ -1,4 +1,4 @@
-# Lab Instrucctions
+# Lab Instructions
 
 Do implement everything using recursion! Ignore any comments in the lab document, as we shall revisit this and have fun using Haskell's Prelude functions.
 
