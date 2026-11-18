@@ -25,3 +25,16 @@ fun2' = sum
         . filter even
         . takeWhile (>1)
         . iterate (\x -> if even x then div x 2 else 3 * x + 1)
+
+
+-- Exercise 2
+data Tree a = Leaf
+            | Node Integer (Tree a) a (Tree a)
+    deriving (Show, Eq)
+
+
+foldTree :: [a] -> Tree a
+foldTree = foldr addToTree Leaf
+    where
+        addToTree :: a -> Tree a -> Tree a
+        addToTree = ...
