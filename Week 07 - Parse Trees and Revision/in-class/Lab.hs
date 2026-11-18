@@ -37,4 +37,44 @@ foldTree :: [a] -> Tree a
 foldTree = foldr addToTree Leaf
     where
         addToTree :: a -> Tree a -> Tree a
-        addToTree = ...
+        addToTree x Leaf                    = Node 0 Leaf x Leaf
+        addToTree x (Node h Leaf y Leaf)    = Node (h+1) (addToTree x Leaf) y Leaf
+        addToTree x (Node h Leaf y right)   = Node h (addToTree x Leaf) y right
+        addToTree x (Node h left y Leaf)    = Node h left y (addToTree x Leaf)
+        addToTree x (Node h l@(Node lh _ _ _) y r@(Node rh _ _ _))
+            | lh < rh   = Node h (addToTree x l) y r
+            | lh > rh   = Node h l y (addToTree x r)
+            | lh == rh  = Node (nlh+1) newLeft y r
+            where
+                newLeft@(Node nlh _ _ _) = addToTree x l
+
+-- Homework: Make this run
+beautify :: String -> String
+beautify = go 0 ""
+    where
+        go :: Int -> String -> String -> String
+        go _ acc ""     = reverse acc
+        go k acc (c:cs)
+            | c == '('  = go (k + 1) (tab ++ '\n':c:acc) cs
+            | c == ')'  = go (k - 1) (c:tab ++ '\n':acc) cs
+            | otherwise = go k (c:acc) cs
+            where 
+                tab = replicate (4*k) ' '
+
+
+-- Exercise 3
+
+xor :: [Bool] -> Bool
+xor = foldr (/=) False
+
+map' :: (a -> b) -> [a] -> [b]
+map' f = foldr (\x acc -> (f x):acc) []
+
+
+-- Exercise 4
+
+sieveSundaram :: Integer -> [Integer]
+sieveSundaram n = map ((+1) . (*2))
+                    $ filter (not . (`elem` s)) [1..n]
+    where
+        s = filter (<=n) [ i + j + 2 * i * j | j <- [1..(div n 3)], i <- [1..j]]
