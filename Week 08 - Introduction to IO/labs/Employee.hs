@@ -1,6 +1,6 @@
 module Employee where
 
-import           Data.Tree
+import Data.Tree ( Tree(Node) )
 
 -- Employee names are represented by Strings.
 type Name = String
@@ -10,6 +10,8 @@ type Name = String
 type Fun  = Integer
 
 -- An Employee consists of a name and a fun score.
+-- What follows is a named alternative to 
+-- data Employee = Emp Name Fun deriving (Show, Read, Eq)
 data Employee = Emp { empName :: Name, empFun :: Fun }
   deriving (Show, Read, Eq)
 
@@ -48,6 +50,9 @@ testCompany2
 data GuestList = GL [Employee] Fun
   deriving (Show, Eq)
 
+-- In this part we declare that GuestList is an instance of Ord, i.e.,
+-- we can compare GuestLists. To do so, we need to implement:
+-- compare :: GuestList -> GuestList -> Ordering
 instance Ord GuestList where
   compare (GL _ f1) (GL _ f2) = compare f1 f2
 
